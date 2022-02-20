@@ -1,8 +1,8 @@
 --[[
-wave version 0.1.6
+wave version 0.1.7
 
 The MIT License (MIT)
-Copyright (c) 2021 CrazedProgrammer
+Copyright (c) 2022 CrazedProgrammer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,8 +30,13 @@ wave._defaultThrottle = 99
 wave._defaultClipMode = 1
 wave._maxInterval = 1
 wave._isNewSystem = false
-if _HOST then
-	wave._isNewSystem = _HOST:sub(15, #_HOST) >= "1.80"
+if _HOST then -- Checks the version of computer craft the program is currently running in and determines whether to use the new system or not (_isNewSystem)
+	local _, _, numMajorVersion, numMinorVersion = string.find(_HOST, "(%d+).(%d+)")
+	if tonumber(numMajorVersion) > 1 then
+		wave._isNewSystem = true
+	elseif tonumber(numMajorVersion) == 1 and tonumber(numMinorVersion) >= 80 then
+		wave._isNewSystem = true
+	end
 end
 
 wave.context = { }
@@ -381,7 +386,7 @@ function wave.loadTrack(path)
 			track.layers[i].volume = volume / 100
 		else
 			track.layers[i].name = name
-			track.layers[i].volume = readInt(1) / 100			
+			track.layers[i].volume = readInt(1) / 100
 		end
 	end
 
